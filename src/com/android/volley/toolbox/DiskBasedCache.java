@@ -155,7 +155,9 @@ public class DiskBasedCache implements Cache {
                 CacheHeader entry = CacheHeader.readHeader(fis);
                 entry.size = file.length();
                 putEntry(entry.key, entry);
-            } catch (IOException e) {
+            } catch (Throwable e) {
+                // we get NegativeArrayIndexException and OutOfMemory here. so
+                // we should remove the wrong cache files in this time
                 if (file != null) {
                    file.delete();
                 }
