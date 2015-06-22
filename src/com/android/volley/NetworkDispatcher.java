@@ -128,6 +128,10 @@ public class NetworkDispatcher extends Thread {
                 mDelivery.postResponse(request, response);
             } catch (VolleyError volleyError) {
                 parseAndDeliverNetworkError(request, volleyError);
+            } catch (OutOfMemoryError e) {
+                // should handle OOME case since the crash number is too high
+                VolleyLog.e(e, "OutOfMemoryError %s", e.toString());
+                mDelivery.postError(request, new VolleyError(e));
             } catch (Exception e) {
                 VolleyLog.e(e, "Unhandled exception %s", e.toString());
                 mDelivery.postError(request, new VolleyError(e));
